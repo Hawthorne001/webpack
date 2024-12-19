@@ -30,7 +30,7 @@ const explain = object => {
 			}
 			let msg = `${key} = ${value}`;
 			if (key !== "stack" && key !== "details" && msg.length > 100)
-				msg = msg.slice(0, 97) + "...";
+				msg = `${msg.slice(0, 97)}...`;
 			return msg;
 		})
 		.join("; ");
@@ -68,22 +68,25 @@ module.exports = function checkArrayExpectation(
 	kind,
 	filename,
 	upperCaseKind,
+	options,
 	done
 ) {
 	if (!done) {
-		done = upperCaseKind;
+		done = options;
+		options = upperCaseKind;
 		upperCaseKind = filename;
 		filename = `${kind}s`;
 	}
 	let array = object[`${kind}s`];
-	if (Array.isArray(array)) {
-		if (kind === "warning") {
-			array = array.filter(item => !/from Terser/.test(item));
-		}
+	if (Array.isArray(array) && kind === "warning") {
+		array = array.filter(item => !/from Terser/.test(item));
 	}
 	if (fs.existsSync(path.join(testDirectory, `${filename}.js`))) {
 		const expectedFilename = path.join(testDirectory, `${filename}.js`);
-		const expected = require(expectedFilename);
+		let expected = require(expectedFilename);
+		if (typeof expected === "function") {
+			expected = expected(options);
+		}
 		const diff = diffItems(array, expected, kind);
 		if (expected.length < array.length) {
 			return (

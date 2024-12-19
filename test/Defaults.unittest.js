@@ -9,9 +9,7 @@ const stripAnsi = require("strip-ansi");
  * @param {string} str String to quote
  * @returns {string} Escaped string
  */
-const quoteMeta = str => {
-	return str.replace(/[-[\]\\/{}()*+?.^$|]/g, "\\$&");
-};
+const quoteMeta = str => str.replace(/[-[\]\\/{}()*+?.^$|]/g, "\\$&");
 
 const cwd = process.cwd();
 const cwdRegExp = new RegExp(
@@ -120,7 +118,7 @@ describe("snapshots", () => {
 		    "environment": Object {
 		      "arrowFunction": true,
 		      "asyncFunction": true,
-		      "bigIntLiteral": undefined,
+		      "bigIntLiteral": true,
 		      "const": true,
 		      "destructuring": true,
 		      "document": true,
@@ -256,6 +254,9 @@ describe("snapshots", () => {
 		        "wrappedContextRecursive": true,
 		        "wrappedContextRegExp": /\\.\\*/,
 		      },
+		      "json": Object {
+		        "exportsDepth": Infinity,
+		      },
 		    },
 		    "rules": Array [],
 		    "unsafeCache": false,
@@ -267,6 +268,7 @@ describe("snapshots", () => {
 		    "global": true,
 		  },
 		  "optimization": Object {
+		    "avoidEntryIife": false,
 		    "checkWasmTypes": false,
 		    "chunkIds": "natural",
 		    "concatenateModules": false,
@@ -337,7 +339,6 @@ describe("snapshots", () => {
 		    "crossOriginLoading": false,
 		    "cssChunkFilename": "[name].css",
 		    "cssFilename": "[name].css",
-		    "cssHeadDataCompression": true,
 		    "devtoolFallbackModuleFilenameTemplate": undefined,
 		    "devtoolModuleFilenameTemplate": undefined,
 		    "devtoolNamespace": "webpack",
@@ -352,7 +353,7 @@ describe("snapshots", () => {
 		    "environment": Object {
 		      "arrowFunction": true,
 		      "asyncFunction": true,
-		      "bigIntLiteral": undefined,
+		      "bigIntLiteral": true,
 		      "const": true,
 		      "destructuring": true,
 		      "document": true,
@@ -685,10 +686,10 @@ describe("snapshots", () => {
 	};
 
 	test("empty config", {}, e =>
-		e.toMatchInlineSnapshot(`Compared values have no visual difference.`)
+		e.toMatchInlineSnapshot("Compared values have no visual difference.")
 	);
 	test("none mode", { mode: "none" }, e =>
-		e.toMatchInlineSnapshot(`Compared values have no visual difference.`)
+		e.toMatchInlineSnapshot("Compared values have no visual difference.")
 	);
 	test("no mode provided", { mode: undefined }, e =>
 		e.toMatchInlineSnapshot(`
@@ -699,6 +700,7 @@ describe("snapshots", () => {
 		-   "mode": "none",
 		+   "mode": undefined,
 		@@ ... @@
+		-     "avoidEntryIife": false,
 		-     "checkWasmTypes": false,
 		-     "chunkIds": "natural",
 		-     "concatenateModules": false,
@@ -706,6 +708,7 @@ describe("snapshots", () => {
 		-     "flagIncludedChunks": false,
 		-     "innerGraph": false,
 		-     "mangleExports": false,
+		+     "avoidEntryIife": true,
 		+     "checkWasmTypes": true,
 		+     "chunkIds": "deterministic",
 		+     "concatenateModules": true,
@@ -766,6 +769,7 @@ describe("snapshots", () => {
 		-   "mode": "none",
 		+   "mode": "production",
 		@@ ... @@
+		-     "avoidEntryIife": false,
 		-     "checkWasmTypes": false,
 		-     "chunkIds": "natural",
 		-     "concatenateModules": false,
@@ -773,6 +777,7 @@ describe("snapshots", () => {
 		-     "flagIncludedChunks": false,
 		-     "innerGraph": false,
 		-     "mangleExports": false,
+		+     "avoidEntryIife": true,
 		+     "checkWasmTypes": true,
 		+     "chunkIds": "deterministic",
 		+     "concatenateModules": true,
@@ -843,6 +848,9 @@ describe("snapshots", () => {
 		-   "mode": "none",
 		+   "mode": "development",
 		@@ ... @@
+		-         "exportsDepth": Infinity,
+		+         "exportsDepth": 1,
+		@@ ... @@
 		-     "unsafeCache": false,
 		+     "unsafeCache": [Function anonymous],
 		@@ ... @@
@@ -856,9 +864,6 @@ describe("snapshots", () => {
 		@@ ... @@
 		-       "minRemainingSize": undefined,
 		+       "minRemainingSize": 0,
-		@@ ... @@
-		-     "cssHeadDataCompression": true,
-		+     "cssHeadDataCompression": false,
 		@@ ... @@
 		-     "pathinfo": false,
 		+     "pathinfo": true,
@@ -922,7 +927,7 @@ describe("snapshots", () => {
 		+     "outputModule": true,
 		@@ ... @@
 		-   "externalsType": "var",
-		+   "externalsType": "module",
+		+   "externalsType": "module-import",
 		@@ ... @@
 		-       "dynamicImport": undefined,
 		-       "dynamicImportInWorker": undefined,
@@ -933,7 +938,16 @@ describe("snapshots", () => {
 		+       "module": true,
 		@@ ... @@
 		-     "chunkFilename": "[name].js",
+		-     "chunkFormat": "array-push",
 		+     "chunkFilename": "[name].mjs",
+		+     "chunkFormat": "module",
+		@@ ... @@
+		-     "chunkLoading": "jsonp",
+		+     "chunkLoading": "import",
+		@@ ... @@
+		-       "jsonp",
+		-       "import-scripts",
+		+       "import",
 		@@ ... @@
 		-       "dynamicImport": undefined,
 		-       "dynamicImportInWorker": undefined,
@@ -957,6 +971,9 @@ describe("snapshots", () => {
 		@@ ... @@
 		-     "scriptType": false,
 		+     "scriptType": "module",
+		@@ ... @@
+		-     "workerChunkLoading": "import-scripts",
+		+     "workerChunkLoading": "import",
 	`)
 	);
 	test("async wasm", { experiments: { asyncWebAssembly: true } }, e =>
@@ -1747,7 +1764,7 @@ describe("snapshots", () => {
 	`)
 	);
 	test("ecmaVersion", { output: { ecmaVersion: 2020 } }, e =>
-		e.toMatchInlineSnapshot(`Compared values have no visual difference.`)
+		e.toMatchInlineSnapshot("Compared values have no visual difference.")
 	);
 	test("single runtimeChunk", { optimization: { runtimeChunk: "single" } }, e =>
 		e.toMatchInlineSnapshot(`
@@ -1894,6 +1911,9 @@ describe("snapshots", () => {
 			-   "mode": "none",
 			+   "mode": "development",
 			@@ ... @@
+			-         "exportsDepth": Infinity,
+			+         "exportsDepth": 1,
+			@@ ... @@
 			-     "unsafeCache": false,
 			+     "unsafeCache": [Function anonymous],
 			@@ ... @@
@@ -1907,9 +1927,6 @@ describe("snapshots", () => {
 			@@ ... @@
 			-       "minRemainingSize": undefined,
 			+       "minRemainingSize": 0,
-			@@ ... @@
-			-     "cssHeadDataCompression": true,
-			+     "cssHeadDataCompression": false,
 			@@ ... @@
 			-     "pathinfo": false,
 			+     "pathinfo": true,
@@ -2069,7 +2086,7 @@ describe("snapshots", () => {
 			@@ ... @@
 			-       "arrowFunction": true,
 			-       "asyncFunction": true,
-			-       "bigIntLiteral": undefined,
+			-       "bigIntLiteral": true,
 			-       "const": true,
 			-       "destructuring": true,
 			+       "arrowFunction": false,
@@ -2103,7 +2120,7 @@ describe("snapshots", () => {
 			@@ ... @@
 			-       "arrowFunction": true,
 			-       "asyncFunction": true,
-			-       "bigIntLiteral": undefined,
+			-       "bigIntLiteral": true,
 			-       "const": true,
 			-       "destructuring": true,
 			+       "arrowFunction": false,
@@ -2314,9 +2331,8 @@ describe("snapshots", () => {
 			+         "resolve": Object {
 			+           "fullySpecified": true,
 			+           "preferRelative": true,
-			@@ ... @@
+			+         },
 			+         "type": "css",
-			+       },
 			@@ ... @@
 			-     "generator": Object {},
 			+     "generator": Object {
@@ -2338,9 +2354,11 @@ describe("snapshots", () => {
 			+       },
 			+     },
 			@@ ... @@
-			+       },
 			+       "css": Object {
+			+         "import": true,
 			+         "namedExports": true,
+			+         "url": true,
+			+       },
 			@@ ... @@
 			+         "exportsPresence": "error",
 			@@ ... @@
@@ -2358,6 +2376,9 @@ describe("snapshots", () => {
 			+     "hashDigestLength": 16,
 			+     "hashFunction": "xxhash64",
 			@@ ... @@
+			+           "...",
+			+         ],
+			+       },
 			+       "css-import": Object {
 			+         "conditionNames": Array [
 			+           "webpack",
@@ -2369,11 +2390,9 @@ describe("snapshots", () => {
 			+         ],
 			+         "mainFields": Array [
 			+           "style",
-			+           "...",
-			+         ],
+			@@ ... @@
 			+         "mainFiles": Array [],
 			+         "preferRelative": true,
-			+       },
 			@@ ... @@
 			-       "<cwd>/node_modules/",
 			+       /^(.+?[\\\\/]node_modules[\\\\/])/,
