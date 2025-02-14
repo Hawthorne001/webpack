@@ -4,8 +4,8 @@ require("./helpers/warmup-webpack");
 
 const { createFsFromVolume, Volume } = require("memfs");
 
-const compile = options => {
-	return new Promise((resolve, reject) => {
+const compile = options =>
+	new Promise((resolve, reject) => {
 		const webpack = require("..");
 		const compiler = webpack(options);
 		compiler.outputFileSystem = createFsFromVolume(new Volume());
@@ -17,7 +17,6 @@ const compile = options => {
 			}
 		});
 	});
-};
 
 describe("Stats", () => {
 	it("should print env string in stats", async () => {
@@ -191,10 +190,10 @@ describe("Stats", () => {
 			      "assets": Array [
 			        Object {
 			          "name": "entryB.js",
-			          "size": 3010,
+			          "size": 3081,
 			        },
 			      ],
-			      "assetsSize": 3010,
+			      "assetsSize": 3081,
 			      "auxiliaryAssets": undefined,
 			      "auxiliaryAssetsSize": 0,
 			      "childAssets": undefined,
@@ -239,10 +238,10 @@ describe("Stats", () => {
 			      "info": Object {
 			        "javascriptModule": false,
 			        "minimized": true,
-			        "size": 3010,
+			        "size": 3081,
 			      },
 			      "name": "entryB.js",
-			      "size": 3010,
+			      "size": 3081,
 			      "type": "asset",
 			    },
 			    Object {

@@ -38,6 +38,7 @@ const files = ["lib/util/semver.js"];
 					ecma: 5,
 					toplevel: true,
 					parse: {
+						// eslint-disable-next-line camelcase
 						bare_returns: true
 					}
 				}
@@ -65,6 +66,10 @@ const files = ["lib/util/semver.js"];
 				fullMatch,
 				`
 //#region runtime code: ${name}
+/**
+ * @param {RuntimeTemplate} runtimeTemplate
+ * @returns {string}
+ */
 exports.${name}RuntimeCode = runtimeTemplate => \`var ${name} = \${runtimeTemplate.basicFunction("${args}", [
 	"// see webpack/${file} for original code",
 	${templateLiteral ? `\`${code}\`` : `'${code}'`}
