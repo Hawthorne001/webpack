@@ -1,12 +1,1 @@
-<svg width="0" height="0" xmlns="http://www.w3.org/2000/svg">
-	<defs>
-		<filter id="myFilter">
-			<feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
-			<feOffset in="blur" dx="5" dy="5" result="offsetBlur" />
-			<feMerge>
-				<feMergeNode in="offsetBlur" />
-				<feMergeNode in="SourceGraphic" />
-			</feMerge>
-		</filter>
-	</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0"><defs><filter id="myFilter"><feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="5"/><feOffset dx="5" dy="5" in="blur" result="offsetBlur"/><feMerge><feMergeNode in="offsetBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs></svg>
