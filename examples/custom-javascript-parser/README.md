@@ -266,8 +266,8 @@ Implementation example:
 ## Unoptimized
 
 ```
-asset output.js 11.3 KiB [emitted] (name: main)
-asset 655.output.js 761 bytes [emitted]
+asset output.js 11.3 KiB [compared for emit] (name: main)
+asset 655.output.js 761 bytes [compared for emit]
 chunk (runtime: main) 655.output.js 24 bytes [rendered]
   > ./async-loaded ./example.js 6:0-24
   ./async-loaded.js 24 bytes [built] [code generated]
